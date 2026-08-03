@@ -1,9 +1,9 @@
-import { TimeLogRepository } from "../../domain/repositories/time-log-repository";
-import { FileSystem } from "./file-system";
-import { Clock } from "../../domain/shared/clock";
-import { TimeLog } from "../../domain/models/time-log";
-import { deserialize, serialize } from "./time-log-schema";
-import { Result } from "../../domain/shared/result";
+import { TimeLogRepository } from "../../domain/repositories/time-log-repository.js";
+import { FileSystem } from "./file-system.js";
+import { Clock } from "../../domain/shared/clock.js";
+import { TimeLog } from "../../domain/models/time-log.js";
+import { deserialize, serialize } from "./time-log-schema.js";
+import { Result } from "../../domain/shared/result.js";
 
 export class JsonTimeLogRepository implements TimeLogRepository {
   constructor(

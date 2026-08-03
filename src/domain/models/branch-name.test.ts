@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'mocha';
-import { BranchName } from './branch-name';
+import { BranchName } from './branch-name.js';
 
 describe('BranchName', () => {
   describe('constructor', () => {

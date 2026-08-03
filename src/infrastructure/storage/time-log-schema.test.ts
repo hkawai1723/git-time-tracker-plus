@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'mocha';
-import { serialize, deserialize } from './time-log-schema';
-import { TimeLog } from '../../domain/models/time-log';
-import { WorkSession } from '../../domain/models/work-session';
-import { BranchName } from '../../domain/models/branch-name';
+import { serialize, deserialize } from './time-log-schema.js';
+import { TimeLog } from '../../domain/models/time-log.js';
+import { WorkSession } from '../../domain/models/work-session.js';
+import { BranchName } from '../../domain/models/branch-name.js';
 
 describe('TimeLogSchema', () => {
   const start = new Date('2026-01-15T09:00:00.000Z');

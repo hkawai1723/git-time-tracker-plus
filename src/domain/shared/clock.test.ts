@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'mocha';
-import { FakeClock, SystemClock } from './clock';
+import { FakeClock, SystemClock } from './clock.js';
 
 describe('SystemClock', () => {
   it('now()は現在時刻に近いDateを返す', () => {

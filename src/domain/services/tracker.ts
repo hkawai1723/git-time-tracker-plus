@@ -1,8 +1,8 @@
-import { TimeLog } from "../models/time-log";
-import { Clock } from "../shared/clock";
-import { BranchName } from "../models/branch-name";
-import { WorkSession } from "../models/work-session";
-import { Result } from "../shared/result";
+import { TimeLog } from "../models/time-log.js";
+import { Clock } from "../shared/clock.js";
+import { BranchName } from "../models/branch-name.js";
+import { WorkSession } from "../models/work-session.js";
+import { Result } from "../shared/result.js";
 
 export type IdGenerator = () => string;
 type Log = {

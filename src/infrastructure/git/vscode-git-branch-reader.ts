@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
-import { GitBranchReader } from "./git-branch-reader";
-import { Result } from "../../domain/shared/result";
-import { BranchName } from "../../domain/models/branch-name";
+import { GitBranchReader } from "./git-branch-reader.js";
+import { Result } from "../../domain/shared/result.js";
+import { BranchName } from "../../domain/models/branch-name.js";
 
 export class VscodeGitBranchReader implements GitBranchReader {
   async read(): Promise<Result<BranchName>> {

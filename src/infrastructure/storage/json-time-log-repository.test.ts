@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'mocha';
-import { JsonTimeLogRepository } from './json-time-log-repository';
-import { InMemoryFileSystem } from './in-memory-file-system';
-import { TimeLog } from '../../domain/models/time-log';
-import { WorkSession } from '../../domain/models/work-session';
-import { BranchName } from '../../domain/models/branch-name';
-import { FakeClock } from '../../domain/shared/clock';
+import { JsonTimeLogRepository } from './json-time-log-repository.js';
+import { InMemoryFileSystem } from './in-memory-file-system.js';
+import { TimeLog } from '../../domain/models/time-log.js';
+import { WorkSession } from '../../domain/models/work-session.js';
+import { BranchName } from '../../domain/models/branch-name.js';
+import { FakeClock } from '../../domain/shared/clock.js';
 
 describe('JsonTimeLogRepository', () => {
   const filePath = '/workspace/.git-time-tracker/time-log.json';

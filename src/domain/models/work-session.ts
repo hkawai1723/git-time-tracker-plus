@@ -1,5 +1,5 @@
-import { BranchName } from "./branch-name";
-import { Clock } from "../shared/clock";
+import { BranchName } from "./branch-name.js";
+import { Clock } from "../shared/clock.js";
 
 export class WorkSession {
   constructor(

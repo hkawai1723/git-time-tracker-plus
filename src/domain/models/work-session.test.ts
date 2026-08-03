@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'mocha';
-import { WorkSession } from './work-session';
-import { BranchName } from './branch-name';
-import { FakeClock } from '../shared/clock';
+import { WorkSession } from './work-session.js';
+import { BranchName } from './branch-name.js';
+import { FakeClock } from '../shared/clock.js';
 
 describe('WorkSession', () => {
   const branch = new BranchName('feature/login');

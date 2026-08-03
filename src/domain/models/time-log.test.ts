@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'mocha';
-import { TimeLog } from './time-log';
-import { WorkSession } from './work-session';
-import { BranchName } from './branch-name';
+import { TimeLog } from './time-log.js';
+import { WorkSession } from './work-session.js';
+import { BranchName } from './branch-name.js';
 
 describe('TimeLog', () => {
   const main = new BranchName('main');

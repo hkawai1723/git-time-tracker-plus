@@ -1,8 +1,8 @@
-import { Tracker, IdGenerator } from "../../domain/services/tracker";
-import { TimeLogRepository } from "../../domain/repositories/time-log-repository";
-import { GitBranchReader } from "../../infrastructure/git/git-branch-reader";
-import { Result } from "../../domain/shared/result";
-import { Clock } from "../../domain/shared/clock";
+import { Tracker, IdGenerator } from "../../domain/services/tracker.js";
+import { TimeLogRepository } from "../../domain/repositories/time-log-repository.js";
+import { GitBranchReader } from "../../infrastructure/git/git-branch-reader.js";
+import { Result } from "../../domain/shared/result.js";
+import { Clock } from "../../domain/shared/clock.js";
 
 export class TrackingUseCase {
   private _tracker: Tracker | null = null;

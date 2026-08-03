@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'mocha';
-import { Tracker } from './tracker';
-import { TimeLog } from '../models/time-log';
-import { BranchName } from '../models/branch-name';
-import { FakeClock } from '../shared/clock';
+import { Tracker } from './tracker.js';
+import { TimeLog } from '../models/time-log.js';
+import { BranchName } from '../models/branch-name.js';
+import { FakeClock } from '../shared/clock.js';
 
 describe('Tracker', () => {
   const main = new BranchName('main');

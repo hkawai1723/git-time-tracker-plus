@@ -1,13 +1,13 @@
 import assert from "node:assert/strict";
 import { describe, it } from "mocha";
-import { TrackingUseCase } from "./tracking-use-case";
-import { TimeLogRepository } from "../../domain/repositories/time-log-repository";
-import { GitBranchReader } from "../../infrastructure/git/git-branch-reader";
-import { TimeLog } from "../../domain/models/time-log";
-import { WorkSession } from "../../domain/models/work-session";
-import { BranchName } from "../../domain/models/branch-name";
-import { FakeClock } from "../../domain/shared/clock";
-import { Result } from "../../domain/shared/result";
+import { TrackingUseCase } from "./tracking-use-case.js";
+import { TimeLogRepository } from "../../domain/repositories/time-log-repository.js";
+import { GitBranchReader } from "../../infrastructure/git/git-branch-reader.js";
+import { TimeLog } from "../../domain/models/time-log.js";
+import { WorkSession } from "../../domain/models/work-session.js";
+import { BranchName } from "../../domain/models/branch-name.js";
+import { FakeClock } from "../../domain/shared/clock.js";
+import { Result } from "../../domain/shared/result.js";
 
 // --- Fake implementations ---
 

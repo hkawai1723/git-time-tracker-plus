@@ -1,5 +1,5 @@
-import { WorkSession } from "./work-session";
-import { BranchName } from "./branch-name";
+import { WorkSession } from "./work-session.js";
+import { BranchName } from "./branch-name.js";
 
 export class TimeLog {
   constructor(

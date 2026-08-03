@@ -1,7 +1,7 @@
-import { TimeLog } from "../../domain/models/time-log";
-import { WorkSession } from "../../domain/models/work-session";
-import { BranchName } from "../../domain/models/branch-name";
-import { Result } from "../../domain/shared/result";
+import { TimeLog } from "../../domain/models/time-log.js";
+import { WorkSession } from "../../domain/models/work-session.js";
+import { BranchName } from "../../domain/models/branch-name.js";
+import { Result } from "../../domain/shared/result.js";
 
 interface TimeLogJson {
   version: number;

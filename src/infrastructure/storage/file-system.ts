@@ -1,4 +1,4 @@
-import { Result } from "../../domain/shared/result";
+import { Result } from "../../domain/shared/result.js";
 
 export interface FileSystem {
   read(path: string): Promise<Result<string>>;

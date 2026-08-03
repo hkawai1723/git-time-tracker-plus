@@ -1,6 +1,6 @@
-import { FileSystem } from "./file-system";
+import { FileSystem } from "./file-system.js";
 import * as vscode from "vscode";
-import { Result } from "../../domain/shared/result";
+import { Result } from "../../domain/shared/result.js";
 
 export class VscodeFileSystem implements FileSystem {
   async read(path: string): Promise<Result<string>> {

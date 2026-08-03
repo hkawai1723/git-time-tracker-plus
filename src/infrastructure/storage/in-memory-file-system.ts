@@ -1,5 +1,5 @@
-import { Result } from "../../domain/shared/result";
-import { FileSystem } from "./file-system";
+import { Result } from "../../domain/shared/result.js";
+import { FileSystem } from "./file-system.js";
 
 export class InMemoryFileSystem implements FileSystem {
   private readonly _files = new Map<string, string>();
