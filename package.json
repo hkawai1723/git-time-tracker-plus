@@ -43,6 +43,7 @@
     "serialize-javascript": "^7.0.6"
   },
   "dependencies": {
-    "mocha": "^11.7.6"
+    "mocha": "^11.7.6",
+    "ulid": "^3.0.2"
   }
 }
