@@ -4,7 +4,7 @@ import { BranchName } from "../models/branch-name";
 import { WorkSession } from "../models/work-session";
 import { Result } from "../shared/result";
 
-type IdGenerator = () => string;
+export type IdGenerator = () => string;
 type Log = {
   ended: WorkSession | null;
   started: WorkSession;

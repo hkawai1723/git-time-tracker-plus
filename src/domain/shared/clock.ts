@@ -9,9 +9,13 @@ export class SystemClock implements Clock {
 }
 
 export class FakeClock implements Clock {
-  constructor(private readonly _now: Date) {}
+  constructor(private _now: Date) {}
 
   now(): Date {
     return this._now;
+  }
+
+  advance(date: Date): void {
+    this._now = date;
   }
 }

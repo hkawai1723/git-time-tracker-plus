@@ -3,8 +3,10 @@ import { TimeLogRepository } from "../../domain/repositories/time-log-repository
 import { GitBranchReader } from "../../infrastructure/git/git-branch-reader";
 import { Result } from "../../domain/shared/result";
 import { Clock } from "../../domain/shared/clock";
+
 export class TrackingUseCase {
   private _tracker: Tracker | null = null;
+
   constructor(
     private readonly _repository: TimeLogRepository,
     private readonly _branchReader: GitBranchReader,
@@ -13,22 +15,69 @@ export class TrackingUseCase {
   ) {}
 
   async activate(): Promise<Result<void>> {
-    const timeLog = await this._repository.load();
-    if (!timeLog.ok) {
-      return timeLog;
+    const logResult = await this._repository.load();
+    if (!logResult.ok) {
+      return logResult;
     }
-    this._tracker = new Tracker(timeLog.value, this._clock, this._generateId);
-    const branch = await this._branchReader.read();
-    if (!branch.ok) {
-      return branch;
+
+    this._tracker = new Tracker(logResult.value, this._clock, this._generateId);
+
+    // クラッシュリカバリ: 前回未終了のセッションを閉じる
+    this._tracker.endCurrentSession();
+
+    const branchResult = await this._branchReader.read();
+    if (!branchResult.ok) {
+      return branchResult;
     }
-    this._tracker.startSession(branch.value);
+
+    this._tracker.startSession(branchResult.value);
     return { ok: true, value: undefined };
   }
-  
-  deactivate() {}
-  onBranchChange() {}
-  onWindowFocusLost() {}
-  onWindowFocusGained() {}
-  flush() {}
+
+  async deactivate(): Promise<Result<void>> {
+    if (this._tracker === null) {
+      return { ok: true, value: undefined };
+    }
+    this._tracker.endCurrentSession();
+    return this._repository.save(this._tracker.timeLog);
+  }
+
+  async onBranchChanged(): Promise<Result<void>> {
+    if (this._tracker === null) {
+      return { ok: false, error: new Error("Not activated") };
+    }
+    const branchResult = await this._branchReader.read();
+    if (!branchResult.ok) {
+      return branchResult;
+    }
+    this._tracker.switchBranch(branchResult.value);
+    return this._repository.save(this._tracker.timeLog);
+  }
+
+  async onWindowFocusLost(): Promise<Result<void>> {
+    if (this._tracker === null) {
+      return { ok: true, value: undefined };
+    }
+    this._tracker.endCurrentSession();
+    return this._repository.save(this._tracker.timeLog);
+  }
+
+  async onWindowFocusGained(): Promise<Result<void>> {
+    if (this._tracker === null) {
+      return { ok: false, error: new Error("Not activated") };
+    }
+    const branchResult = await this._branchReader.read();
+    if (!branchResult.ok) {
+      return branchResult;
+    }
+    this._tracker.startSession(branchResult.value);
+    return { ok: true, value: undefined };
+  }
+
+  async flush(): Promise<Result<void>> {
+    if (this._tracker === null) {
+      return { ok: true, value: undefined };
+    }
+    return this._repository.save(this._tracker.timeLog);
+  }
 }
