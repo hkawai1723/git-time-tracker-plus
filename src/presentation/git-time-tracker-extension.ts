@@ -7,6 +7,8 @@ import { JsonTimeLogRepository } from "../infrastructure/storage/json-time-log-r
 import { VscodeGitBranchReader } from "../infrastructure/git/vscode-git-branch-reader.js";
 import { Result } from "../domain/shared/result.js";
 import { TrackingUseCase } from "../application/usecases/tracking-use-case.js";
+import { ExportTimeLogUseCase } from "../application/usecases/export-time-log-use-case.js";
+import { ExportTimeLogCommand } from "./commands/export-time-log-command.js";
 import { BranchWatcher } from "./watchers/branch-watcher.js";
 import { WindowStateWatcher } from "./watchers/window-state-watcher.js";
 
@@ -60,6 +62,15 @@ export class GitTimeTrackerExtension implements vscode.Disposable {
     this.#flushTimer = setInterval(() => {
       this.#useCase?.flush().then(this.#logIfError);
     }, GitTimeTrackerExtension.#FLUSH_INTERVAL_MS);
+
+    const exportUseCase = new ExportTimeLogUseCase(repository, clock);
+    const exportCommand = new ExportTimeLogCommand(exportUseCase);
+    this.#disposables.push(
+      vscode.commands.registerCommand(
+        "git-time-tracker.exportTimeLog",
+        () => exportCommand.execute(),
+      ),
+    );
 
     context.subscriptions.push(this);
   }
