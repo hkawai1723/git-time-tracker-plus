@@ -73,6 +73,32 @@ describe("ExportTimeLogUseCase", () => {
     assert.equal(parsed.sessions.length, 0);
   });
 
+  it("アクティブなセッションのendedAtを現在時刻で埋めて出力する", async () => {
+    const repository = new FakeTimeLogRepository();
+    const activeSession = new WorkSession(
+      "id-1",
+      new BranchName("feature/active"),
+      t0,
+      null,
+    );
+    repository.setTimeLog(new TimeLog(1, [activeSession]));
+
+    const clock = new FakeClock(exportedAt);
+    const useCase = new ExportTimeLogUseCase(repository, clock);
+
+    const result = await useCase.execute();
+    assert.equal(result.ok, true);
+    if (!result.ok) { return; }
+
+    const parsed = JSON.parse(result.value) as {
+      sessions: { endedAt: string | null }[];
+    };
+    assert.equal(parsed.sessions[0].endedAt, exportedAt.toISOString());
+
+    // 内部データは変更されていない
+    assert.equal(activeSession.endedAt, null);
+  });
+
   it("リポジトリの読み込みに失敗するとエラーを返す", async () => {
     const repository: TimeLogRepository = {
       async load(): Promise<Result<TimeLog>> {

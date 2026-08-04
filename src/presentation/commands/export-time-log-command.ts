@@ -13,8 +13,16 @@ export class ExportTimeLogCommand {
       return;
     }
 
+    const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+    const folderName = workspaceFolder?.name ?? "project";
+    const date = new Date().toISOString().slice(0, 10);
+    const defaultUri = vscode.Uri.joinPath(
+      workspaceFolder?.uri ?? vscode.Uri.file(""),
+      `time-log_${folderName}_${date}.json`,
+    );
+
     const uri = await vscode.window.showSaveDialog({
-      defaultUri: vscode.workspace.workspaceFolders?.[0]?.uri,
+      defaultUri,
       filters: { JSON: ["json"] },
       saveLabel: "Export",
     });
