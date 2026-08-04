@@ -12,7 +12,14 @@
   "activationEvents": ["onStartupFinished"],
   "type": "module",
   "main": "./out/extension.js",
-  "contributes": {},
+  "contributes": {
+    "commands": [
+      {
+        "command": "git-time-tracker.exportTimeLog",
+        "title": "Git Time Tracker: Export Time Log"
+      }
+    ]
+  },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",

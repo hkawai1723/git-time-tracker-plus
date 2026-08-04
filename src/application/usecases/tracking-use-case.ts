@@ -50,6 +50,10 @@ export class TrackingUseCase {
     if (!branchResult.ok) {
       return branchResult;
     }
+    const activeSession = this._tracker.timeLog.findActiveSession();
+    if (activeSession !== null && activeSession.branch.equals(branchResult.value)) {
+      return { ok: true, value: undefined };
+    }
     this._tracker.switchBranch(branchResult.value);
     return this._repository.save(this._tracker.timeLog);
   }

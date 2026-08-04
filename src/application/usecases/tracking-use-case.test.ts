@@ -140,6 +140,24 @@ describe("TrackingUseCase", () => {
   });
 
   describe("onBranchChanged", () => {
+    it("同じブランチのままなら何もしない", async () => {
+      const deps = createDeps();
+      const useCase = createUseCase(deps);
+      await useCase.activate();
+
+      // ブランチは "main" のまま変えない
+      deps.clock.advance(t1);
+      const result = await useCase.onBranchChanged();
+      assert.equal(result.ok, true);
+
+      const logResult = await deps.repository.load();
+      if (!logResult.ok) { return; }
+      // セッションは1つのまま、分割されていない
+      assert.equal(logResult.value.sessions.length, 1);
+      assert.equal(logResult.value.sessions[0].isActive, true);
+      assert.equal(deps.repository.savedCount, 0);
+    });
+
     it("セッションを切り替えて保存する", async () => {
       const deps = createDeps();
       const useCase = createUseCase(deps);

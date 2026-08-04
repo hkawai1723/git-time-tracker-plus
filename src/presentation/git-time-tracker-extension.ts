@@ -1,10 +1,11 @@
-import * as vscode from "vscode";
 import * as path from "path";
+import * as vscode from "vscode";
 import { ulid } from "ulid";
 import { SystemClock } from "../domain/shared/clock.js";
 import { VscodeFileSystem } from "../infrastructure/storage/vscode-file-system.js";
 import { JsonTimeLogRepository } from "../infrastructure/storage/json-time-log-repository.js";
 import { VscodeGitBranchReader } from "../infrastructure/git/vscode-git-branch-reader.js";
+import { Result } from "../domain/shared/result.js";
 import { TrackingUseCase } from "../application/usecases/tracking-use-case.js";
 import { BranchWatcher } from "./watchers/branch-watcher.js";
 import { WindowStateWatcher } from "./watchers/window-state-watcher.js";
@@ -17,18 +18,16 @@ export class GitTimeTrackerExtension implements vscode.Disposable {
   #flushTimer: ReturnType<typeof setInterval> | null = null;
 
   async start(context: vscode.ExtensionContext): Promise<void> {
-    const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
-    if (!workspaceFolder) {
+    const storageUri = context.storageUri;
+    if (!storageUri) {
       return;
     }
 
+    await vscode.workspace.fs.createDirectory(storageUri);
+
     const clock = new SystemClock();
     const fileSystem = new VscodeFileSystem();
-    const filePath = path.join(
-      workspaceFolder.uri.fsPath,
-      ".git-time-tracker",
-      "time-log.json",
-    );
+    const filePath = path.join(storageUri.fsPath, "time-log.json");
     const repository = new JsonTimeLogRepository(filePath, fileSystem, clock);
     const branchReader = new VscodeGitBranchReader();
 
@@ -46,20 +45,20 @@ export class GitTimeTrackerExtension implements vscode.Disposable {
     }
 
     const branchWatcher = new BranchWatcher(() => {
-      this.#useCase?.onBranchChanged();
+      this.#useCase?.onBranchChanged().then(this.#logIfError);
     });
     branchWatcher.start();
     this.#disposables.push(branchWatcher);
 
     const windowWatcher = new WindowStateWatcher(
-      () => { this.#useCase?.onWindowFocusGained(); },
-      () => { this.#useCase?.onWindowFocusLost(); },
+      () => { this.#useCase?.onWindowFocusGained().then(this.#logIfError); },
+      () => { this.#useCase?.onWindowFocusLost().then(this.#logIfError); },
     );
     windowWatcher.start();
     this.#disposables.push(windowWatcher);
 
     this.#flushTimer = setInterval(() => {
-      this.#useCase?.flush();
+      this.#useCase?.flush().then(this.#logIfError);
     }, GitTimeTrackerExtension.#FLUSH_INTERVAL_MS);
 
     context.subscriptions.push(this);
@@ -73,6 +72,12 @@ export class GitTimeTrackerExtension implements vscode.Disposable {
     if (this.#useCase !== null) {
       await this.#useCase.deactivate();
       this.#useCase = null;
+    }
+  }
+
+  #logIfError(result: Result<void>): void {
+    if (!result.ok) {
+      console.error("[git-time-tracker]", result.error.message);
     }
   }
 
