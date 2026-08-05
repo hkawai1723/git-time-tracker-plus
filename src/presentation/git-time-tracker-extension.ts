@@ -8,7 +8,9 @@ import { VscodeGitBranchReader } from "../infrastructure/git/vscode-git-branch-r
 import { Result } from "../domain/shared/result.js";
 import { TrackingUseCase } from "../application/usecases/tracking-use-case.js";
 import { ExportTimeLogUseCase } from "../application/usecases/export-time-log-use-case.js";
+import { ExportSummaryUseCase } from "../application/usecases/export-summary-use-case.js";
 import { ExportTimeLogCommand } from "./commands/export-time-log-command.js";
+import { ExportSummaryCommand } from "./commands/export-summary-command.js";
 import { BranchWatcher } from "./watchers/branch-watcher.js";
 import { WindowStateWatcher } from "./watchers/window-state-watcher.js";
 
@@ -69,6 +71,15 @@ export class GitTimeTrackerExtension implements vscode.Disposable {
       vscode.commands.registerCommand(
         "git-time-tracker.exportTimeLog",
         () => exportCommand.execute(),
+      ),
+    );
+
+    const summaryUseCase = new ExportSummaryUseCase(repository, clock);
+    const summaryCommand = new ExportSummaryCommand(summaryUseCase);
+    this.#disposables.push(
+      vscode.commands.registerCommand(
+        "git-time-tracker.exportSummary",
+        () => summaryCommand.execute(),
       ),
     );
 

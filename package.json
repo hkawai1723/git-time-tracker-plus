@@ -17,6 +17,10 @@
       {
         "command": "git-time-tracker.exportTimeLog",
         "title": "Git Time Tracker: Export Time Log"
+      },
+      {
+        "command": "git-time-tracker.exportSummary",
+        "title": "Git Time Tracker: Export Summary"
       }
     ]
   },
