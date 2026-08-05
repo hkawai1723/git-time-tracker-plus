@@ -3,7 +3,13 @@
   "displayName": "Git Time Tracker Plus",
   "description": "This is an extension that tracks work time based on Git branches.",
   "version": "0.0.1",
+  "publisher": "HiroakiKawai",
   "author": "Hiroaki Kawai",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hkawai1723/git-time-tracker-plus"
+  },
+  "license": "MIT",
   "engines": {
     "vscode": "^1.125.0"
   },

@@ -1,71 +1,60 @@
-# git-time-tracker-reserve-plus README
+# Git Time Tracker Plus
 
-This is the README for your extension "git-time-tracker-reserve-plus". After writing up a brief description, we recommend including the following sections.
+Gitブランチごとの作業時間を自動計測し、JSON形式で記録・出力するVS Code拡張機能。
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- **ブランチ切り替え検知**: VS Code Git APIを利用してブランチの切り替えを自動検出し、セッションを切り替える
+- **ウィンドウフォーカス連動**: ウィンドウのフォーカス状態を監視し、非アクティブ中は計測を一時停止する
+- **自動保存**: 60秒間隔でストレージに保存し、クラッシュ時のデータ損失を最小限にする
+- **クラッシュリカバリ**: 前回異常終了した場合、未終了セッションを自動で閉じて復旧する
+- **30日保持**: 30日以上前のセッションデータを自動で削除する
 
-For example if there is an image subfolder under your extension project workspace:
+## Commands
 
-\!\[feature X\]\(images/feature-x.png\)
+コマンドパレット (`Cmd+Shift+P` / `Ctrl+Shift+P`) から実行できます。
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+| コマンド | 説明 |
+|----------|------|
+| `Git Time Tracker: Export Time Log` | 全作業セッションをJSON形式でエクスポートする |
+| `Git Time Tracker: Export Summary` | ブランチ別・日別の作業時間サマリーをJSON形式でエクスポートする |
+
+### Export Time Log
+
+全セッションの生データをJSON出力します。各セッションにはブランチ名・開始時刻・終了時刻が含まれます。
+
+### Export Summary
+
+直近30日間の作業時間をブランチ別・日別に集計し、分単位でJSON出力します。日をまたぐセッションは日付ごとに正しく分割されます。
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+- VS Code 1.125.0 以上
+- VS Code の Git 拡張機能が有効であること
 
-## Extension Settings
+## Development
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+```bash
+npm install       # 依存パッケージをインストール
+npm run compile   # TypeScriptをコンパイル
+npm run watch     # ウォッチモードでコンパイル
+npm run lint      # ESLintを実行
+npm run test      # テストを実行
+```
 
-For example:
+## Architecture
 
-This extension contributes the following settings:
+DDD (ドメイン駆動設計) に基づくレイヤー構成を採用しています。
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+```
+src/
+  domain/           # ドメイン層: ビジネスロジック (VS Code依存なし)
+  application/      # アプリケーション層: ユースケース
+  infrastructure/   # インフラ層: 永続化・Git操作
+  presentation/     # プレゼンテーション層: VS Code UI・コマンド
+  extension.ts      # エントリーポイント
+```
 
-## Known Issues
+## License
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+See [LICENSE](LICENSE) for details.
