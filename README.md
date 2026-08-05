@@ -32,29 +32,6 @@ Gitブランチごとの作業時間を自動計測し、JSON形式で記録・�
 - VS Code 1.125.0 以上
 - VS Code の Git 拡張機能が有効であること
 
-## Development
-
-```bash
-npm install       # 依存パッケージをインストール
-npm run compile   # TypeScriptをコンパイル
-npm run watch     # ウォッチモードでコンパイル
-npm run lint      # ESLintを実行
-npm run test      # テストを実行
-```
-
-## Architecture
-
-DDD (ドメイン駆動設計) に基づくレイヤー構成を採用しています。
-
-```
-src/
-  domain/           # ドメイン層: ビジネスロジック (VS Code依存なし)
-  application/      # アプリケーション層: ユースケース
-  infrastructure/   # インフラ層: 永続化・Git操作
-  presentation/     # プレゼンテーション層: VS Code UI・コマンド
-  extension.ts      # エントリーポイント
-```
-
 ## License
 
 See [LICENSE](LICENSE) for details.
