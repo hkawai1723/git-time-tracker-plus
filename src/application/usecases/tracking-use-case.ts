@@ -5,6 +5,8 @@ import { Result } from "../../domain/shared/result.js";
 import { Clock } from "../../domain/shared/clock.js";
 
 export class TrackingUseCase {
+  static readonly #RETENTION_DAYS = 30;
+
   private _tracker: Tracker | null = null;
 
   constructor(
@@ -19,6 +21,11 @@ export class TrackingUseCase {
     if (!logResult.ok) {
       return logResult;
     }
+
+    const cutoff = new Date(
+      this._clock.now().getTime() - TrackingUseCase.#RETENTION_DAYS * 24 * 60 * 60 * 1000,
+    );
+    logResult.value.removeSessionsBefore(cutoff);
 
     this._tracker = new Tracker(logResult.value, this._clock, this._generateId);
 

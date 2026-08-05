@@ -22,4 +22,12 @@ export class TimeLog {
   findActiveSession(): WorkSession | null {
     return this._sessions.find((s) => s.isActive) ?? null;
   }
+
+  removeSessionsBefore(cutoff: Date): void {
+    const toKeep = this._sessions.filter(
+      (s) => s.isActive || (s.endedAt !== null && s.endedAt.getTime() >= cutoff.getTime()),
+    );
+    this._sessions.length = 0;
+    toKeep.forEach((s) => this._sessions.push(s));
+  }
 }

@@ -88,6 +88,35 @@ describe("TrackingUseCase", () => {
       assert.equal(logResult.value.sessions[0].isActive, true);
     });
 
+    it("30日より古いセッションをパージする", async () => {
+      const deps = createDeps();
+      const thirtyOneDaysAgo = new Date(t0.getTime() - 31 * 24 * 60 * 60 * 1000);
+      const thirtyOneDaysAgoEnd = new Date(thirtyOneDaysAgo.getTime() + 30 * 60 * 1000);
+      const oldSession = new WorkSession(
+        "old-id",
+        new BranchName("feature/old"),
+        thirtyOneDaysAgo,
+        thirtyOneDaysAgoEnd,
+      );
+      const recentSession = new WorkSession(
+        "recent-id",
+        new BranchName("feature/recent"),
+        new Date(t0.getTime() - 5 * 24 * 60 * 60 * 1000),
+        new Date(t0.getTime() - 5 * 24 * 60 * 60 * 1000 + 30 * 60 * 1000),
+      );
+      deps.repository.setTimeLog(new TimeLog(1, [oldSession, recentSession]));
+
+      const useCase = createUseCase(deps);
+      await useCase.activate();
+
+      const logResult = await deps.repository.load();
+      if (!logResult.ok) { return; }
+      // 古いセッションが除去され、最近のセッション + 新セッションのみ残る
+      const sessions = logResult.value.sessions;
+      assert.equal(sessions.filter((s) => s.id === "old-id").length, 0);
+      assert.equal(sessions.filter((s) => s.id === "recent-id").length, 1);
+    });
+
     it("前回未終了のセッションを閉じてから新セッションを開始する", async () => {
       const deps = createDeps();
       const crashedSession = new WorkSession(
